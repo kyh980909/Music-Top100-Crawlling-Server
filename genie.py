@@ -1,6 +1,8 @@
 from base import Base
 import re
 
+from music import Music
+
 
 class Genie(Base):
     def __init__(self):
@@ -11,6 +13,7 @@ class Genie(Base):
 
     def page_parse(self):
         soups = Base.page_parse(self)
+        data = []
         start_rank = 1
         for soup in soups:
             for rank, tr in enumerate(soup.select(
@@ -27,9 +30,6 @@ class Genie(Base):
                 song = tr.select('td.info > a')[0].text.strip()
                 singer = tr.select('td.info > a')[1].text.strip()
 
-                print(rank_change)
-                print(rank)
-                print(album_photo)
-                print(song)
-                print(singer)
+                data.append(Music(rank, rank_change, album_photo, song, singer).to_json())
             start_rank += 50
+        return data

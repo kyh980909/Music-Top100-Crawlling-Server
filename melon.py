@@ -1,6 +1,8 @@
 from base import Base
 import re
 
+from music import Music
+
 
 class Melon(Base):
     def __init__(self):
@@ -8,6 +10,9 @@ class Melon(Base):
 
     def page_parse(self):
         soups = Base.page_parse(self)
+
+        data = []
+
         for soup in soups:
             for rank, tr in enumerate(soup.select('#frm > div > table > tbody > tr'), start=1):
                 tds = tr.select('td')
@@ -25,8 +30,5 @@ class Melon(Base):
                 singer = tds[5].select_one(
                     'div[class="ellipsis rank02"]').select('a')[0].text.strip()
 
-                print(rank_change)
-                print(str(rank)+'위')
-                print(album_photo)
-                print('제목: ' + song)
-                print('가수: '+singer)
+                data.append(Music(rank, rank_change, album_photo, song, singer).to_json())
+        return data
