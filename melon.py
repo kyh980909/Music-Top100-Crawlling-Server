@@ -24,11 +24,12 @@ class Melon(Base):
                 else:
                     rank_change = {'none': 0}
                 album_id = re.findall("\d+", tds[3].select('a')[0]['href'])[0]
-                album_photo = tds[3].select('img')[0]['src']
-                song = tds[5].select_one(
+                album_photo = tds[1].select('img')[0]['src']
+                song = tds[3].select_one(
                     'div[class="ellipsis rank01"]').text.strip()
-                singer = tds[5].select_one(
+                singer = tds[3].select_one(
                     'div[class="ellipsis rank02"]').select('a')[0].text.strip()
 
-                data.append(Music(rank, rank_change, album_photo, song, singer).to_json())
+                data.append(Music(rank, rank_change,
+                                  album_photo, song, singer).to_json())
         return data
